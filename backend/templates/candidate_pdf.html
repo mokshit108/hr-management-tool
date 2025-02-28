@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Candidate Profile: {{ candidate.first_name }} {{ candidate.last_name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #0066cc;
+        }
+        h2 {
+            color: #0066cc;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .contact-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .contact-item {
+            margin-bottom: 5px;
+        }
+        .job-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+        .status.applied { background-color: #e6f7ff; color: #0066cc; }
+        .status.screening { background-color: #fff7e6; color: #fa8c16; }
+        .status.interview { background-color: #f6ffed; color: #52c41a; }
+        .status.assessment { background-color: #e6fffb; color: #13c2c2; }
+        .status.offer { background-color: #fcffe6; color: #7cb305; }
+        .status.hired { background-color: #f9f0ff; color: #722ed1; }
+        .status.rejected { background-color: #fff1f0; color: #f5222d; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ candidate.first_name }} {{ candidate.last_name }}</h1>
+        <div class="job-title">{{ candidate.job_title }} - {{ candidate.job_department }}</div>
+        <div class="status {{ candidate.status|lower }}">{{ candidate.status }}</div>
+    </div>
+    
+    <div class="section">
+        <h2>Contact Information</h2>
+        <div class="contact-info">
+            <div>
+                <div class="contact-item"><strong>Email:</strong> {{ candidate.email }}</div>
+                <div class="contact-item"><strong>Phone:</strong> {{ candidate.phone }}</div>
+            </div>
+            <div>
+                <div class="contact-item"><strong>Applied:</strong> {{ candidate.applied_at }}</div>
+                <div class="contact-item"><strong>Last Updated:</strong> {{ candidate.updated_at }}</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Qualifications</h2>
+        <div><strong>Experience:</strong> {{ candidate.experience_years }} years</div>
+        <div><strong>Education:</strong> {{ candidate.education }}</div>
+        <div><strong>Skills:</strong> {{ candidate.skills }}</div>
+    </div>
+    
+    {% if candidate.notes %}
+    <div class="section">
+        <h2>Interview Notes</h2>
+        <p>{{ candidate.notes }}</p>
+    </div>
+    {% endif %}
+    
+    <div class="footer">
+        <p>Generated on: {{ now }}</p>
+    </div>
+</body>
+</html>
