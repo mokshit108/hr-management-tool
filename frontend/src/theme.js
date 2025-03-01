@@ -1,4 +1,5 @@
 import { extendTheme } from '@chakra-ui/react';
+import "@fontsource/urbanist"; // Import Urbanist font
 
 const theme = extendTheme({
   colors: {
@@ -16,8 +17,8 @@ const theme = extendTheme({
     },
   },
   fonts: {
-    heading: '"Inter", sans-serif',
-    body: '"Inter", sans-serif',
+    heading: "'Urbanist', sans-serif",
+    body: "'Urbanist', sans-serif",
   },
   components: {
     Button: {

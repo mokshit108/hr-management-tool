@@ -5,9 +5,9 @@ import enum
 class CandidateStatus(enum.Enum):
     APPLIED = "Applied"
     SCREENING = "Screening"
+    DESIGNCHALLENEG = "Design Challenge"
     INTERVIEW = "Interview"
-    ASSESSMENT = "Assessment"
-    OFFER = "Offer"
+    HRROUND = "HR Round"
     HIRED = "Hired"
     REJECTED = "Rejected"
 

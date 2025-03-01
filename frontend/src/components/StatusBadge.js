@@ -1,30 +1,46 @@
 import React from 'react';
 import { Badge } from '@chakra-ui/react';
 
-const statusColors = {
-  APPLIED: { bg: 'blue.100', text: 'blue.800' },
-  SCREENING: { bg: 'yellow.100', text: 'yellow.800' },
-  INTERVIEW: { bg: 'green.100', text: 'green.800' },
-  ASSESSMENT: { bg: 'cyan.100', text: 'cyan.800' },
-  OFFER: { bg: 'indigo.100', text: 'indigo.800' },
-  HIRED: { bg: 'purple.100', text: 'purple.800' },
-  REJECTED: { bg: 'red.100', text: 'red.800' },
-};
-
 const StatusBadge = ({ status }) => {
-  const normalizedStatus = status?.toUpperCase() || 'APPLIED';
-  const colorScheme = statusColors[normalizedStatus] || statusColors.APPLIED;
-  
+  // Function to extract and format the status
+  const formatStatus = (statusString) => {
+    // Check if the status follows the CandidateStatus.XXX pattern
+    if (statusString && statusString.includes('CandidateStatus.')) {
+      // Extract the part after the dot and convert to lowercase
+      return statusString.split('.')[1].toLowerCase();
+    }
+    // If it's already just the status word, return it as is
+    return statusString ? statusString.toLowerCase() : '';
+  };
+
+  // Get the formatted status
+  const formattedStatus = formatStatus(status);
+
+  // Define color schemes based on status
+  const getColorScheme = () => {
+    switch (formattedStatus) {
+      case 'applied':
+        return 'blue';
+      case 'screening':
+        return 'purple';
+      case 'designchallenge':
+        return 'orange';
+      case 'interview':
+        return 'cyan';
+      case 'hrround':
+        return 'teal';
+      case 'hired':
+        return 'green';
+      case 'rejected':
+        return 'red';
+      default:
+        return 'gray';
+    }
+  };
+
   return (
-    <Badge
-      px={2}
-      py={1}
-      borderRadius="full"
-      textTransform="capitalize"
-      bg={colorScheme.bg}
-      color={colorScheme.text}
-    >
-      {status}
+    <Badge colorScheme={getColorScheme()} borderRadius="full" px={2} py={1}>
+      {formattedStatus}
     </Badge>
   );
 };

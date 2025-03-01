@@ -8,21 +8,18 @@ import {
   Td, 
   Box, 
   Flex,
-  Input,
   Select,
-  Button,
-  IconButton,
   Spinner,
   Text,
   HStack
 } from '@chakra-ui/react';
-import { FiChevronUp, FiChevronDown, FiFilter, FiSearch, FiUserPlus } from 'react-icons/fi';
+import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import { useCandidates } from '../contexts/CandidateContext';
 import { useNavigate } from 'react-router-dom';
 import StatusBadge from './StatusBadge';
 import { format } from 'date-fns';
 
-const CandidateTable = ({ onImportClick }) => {
+const CandidateTable = ({ onEditCandidate }) => {
   const { 
     candidates, 
     loading, 
@@ -33,12 +30,8 @@ const CandidateTable = ({ onImportClick }) => {
   
   const navigate = useNavigate();
   
-  const handleStatusFilterChange = (e) => {
-    updateFilters({ status: e.target.value });
-  };
-  
-  const handleSearchChange = (e) => {
-    updateFilters({ search: e.target.value });
+  const handleYearFilterChange = (e) => {
+    updateFilters({ year: e.target.value });
   };
   
   const handleSortChange = (field) => {
@@ -55,91 +48,85 @@ const CandidateTable = ({ onImportClick }) => {
     if (filters.sort_by !== field) return null;
     
     return filters.sort_order === 'asc' ? 
-      <FiChevronUp aria-label="Sorted ascending" /> : 
-      <FiChevronDown aria-label="Sorted descending" />;
+      <FiChevronUp aria-label="Sorted ascending" color="white" /> : 
+      <FiChevronDown aria-label="Sorted descending" color="white" />;
   };
   
   const handleRowClick = (id) => {
-    navigate(`/candidates/${id}`);
+    if (onEditCandidate) {
+      const candidate = candidates.find(c => c.id === id);
+      onEditCandidate(candidate);
+    } else {
+      navigate(`/candidates/${id}`);
+    }
   };
+  
+  // Generate years for filter (current year and 4 years back)
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({length: 5}, (_, i) => currentYear - i);
   
   if (error) {
     return (
-      <Box p={4} bg="red.50" color="red.800" borderRadius="md">
+      <Box p={4} bg="#252525" color="red.300" borderRadius="md">
         <Text>{error}</Text>
       </Box>
     );
   }
   
   return (
-    <Box bg="white" borderRadius="md" shadow="sm" overflow="hidden">
-      <Flex p={4} borderBottomWidth="1px" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={3}>
-        <HStack spacing={4} flex="1" minW="300px">
-          <Box position="relative" flex="1">
-            <Input
-              placeholder="Search candidates"
-              value={filters.search}
-              onChange={handleSearchChange}
-              pl={10}
-            />
-            <Box position="absolute" left={3} top="50%" transform="translateY(-50%)">
-              <FiSearch color="gray.400" />
-            </Box>
-          </Box>
-          
+    <Box bg="#202020" borderRadius="md" shadow="md" overflow="hidden" borderColor="gray.700" borderWidth="1px">
+      <Flex p={4} borderBottomWidth="1px" borderColor="gray.700" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={3}>
+        <HStack spacing={4} flex="1" minW="200px">
           <Box width="200px">
             <Select 
-              placeholder="All Statuses" 
-              value={filters.status}
-              onChange={handleStatusFilterChange}
-              icon={<FiFilter />}
+              placeholder="All Years" 
+              value={filters.year || ''}
+              onChange={handleYearFilterChange}
+              bg="#252525"
+              borderColor="gray.700"
+              _hover={{
+                borderColor: "gray.600"
+              }}
+              color="white"
             >
-              <option value="applied">Applied</option>
-              <option value="screening">Screening</option>
-              <option value="interview">Interview</option>
-              <option value="assessment">Assessment</option>
-              <option value="offer">Offer</option>
-              <option value="hired">Hired</option>
-              <option value="rejected">Rejected</option>
+              {years.map(year => (
+                <option key={year} value={year.toString()}>{year}</option>
+              ))}
             </Select>
           </Box>
         </HStack>
-        
-        <Button 
-          leftIcon={<FiUserPlus />} 
-          colorScheme="blue" 
-          onClick={onImportClick}
-        >
-          Import Candidates
-        </Button>
       </Flex>
       
       {loading ? (
         <Flex justify="center" align="center" py={10}>
-          <Spinner size="xl" color="blue.500" />
+          <Spinner size="xl" color="blue.400" />
         </Flex>
       ) : candidates.length === 0 ? (
-        <Box p={8} textAlign="center" color="gray.500">
+        <Box p={8} textAlign="center" color="gray.400">
           <Text fontSize="lg">No candidates found</Text>
           <Text fontSize="sm" mt={2}>Try adjusting your filters or import new candidates</Text>
         </Box>
       ) : (
-        <Table variant="simple">
-          <Thead bg="gray.50">
+        <Table variant="simple" colorScheme="whiteAlpha">
+          <Thead bg="#252525">
             <Tr>
               <Th 
                 cursor="pointer" 
                 onClick={() => handleSortChange('last_name')}
+                color="gray.300"
+                borderColor="gray.700"
               >
                 <Flex align="center">
                   Candidate 
                   {getSortIcon('last_name')}
                 </Flex>
               </Th>
-              <Th>Position</Th>
+              <Th color="gray.300" borderColor="gray.700">Position</Th>
               <Th 
                 cursor="pointer" 
                 onClick={() => handleSortChange('applied_at')}
+                color="gray.300"
+                borderColor="gray.700"
               >
                 <Flex align="center">
                   Applied Date
@@ -149,31 +136,33 @@ const CandidateTable = ({ onImportClick }) => {
               <Th
                 cursor="pointer"
                 onClick={() => handleSortChange('experience_years')}
+                color="gray.300"
+                borderColor="gray.700"
               >
                 <Flex align="center">
                   Experience
                   {getSortIcon('experience_years')}
                 </Flex>
               </Th>
-              <Th>Status</Th>
+              <Th color="gray.300" borderColor="gray.700">Status</Th>
             </Tr>
           </Thead>
           <Tbody>
             {candidates.map((candidate) => (
               <Tr 
                 key={candidate.id} 
-                _hover={{ bg: 'gray.50' }}
+                _hover={{ bg: "#252525" }}
                 cursor="pointer"
                 onClick={() => handleRowClick(candidate.id)}
               >
-                <Td>
+                <Td borderColor="gray.700">
                   <Text fontWeight="medium">{candidate.first_name} {candidate.last_name}</Text>
-                  <Text fontSize="sm" color="gray.600">{candidate.email}</Text>
+                  <Text fontSize="sm" color="gray.400">{candidate.email}</Text>
                 </Td>
-                <Td>{candidate.job_title}</Td>
-                <Td>{format(new Date(candidate.applied_at), 'MMM dd, yyyy')}</Td>
-                <Td>{candidate.experience_years} years</Td>
-                <Td>
+                <Td borderColor="gray.700">{candidate.job_title}</Td>
+                <Td borderColor="gray.700">{format(new Date(candidate.applied_at), 'MMM dd, yyyy')}</Td>
+                <Td borderColor="gray.700">{candidate.experience_years} years</Td>
+                <Td borderColor="gray.700">
                   <StatusBadge status={candidate.status} />
                 </Td>
               </Tr>

@@ -108,10 +108,11 @@ const CandidateForm = ({ candidate, onSubmit, onCancel }) => {
         <FormControl isInvalid={formik.touched.status && formik.errors.status}>
           <FormLabel>Status</FormLabel>
           <Select id="status" name="status" {...formik.getFieldProps('status')}>
-            <option value="applied">Applied</option>
+          <option value="applied">Applied</option>
             <option value="screening">Screening</option>
+            <option value="designchallenge">Design Challenge</option>
             <option value="interview">Interview</option>
-            <option value="offered">Offered</option>
+            <option value="hrround">HR Round</option>
             <option value="hired">Hired</option>
             <option value="rejected">Rejected</option>
           </Select>
