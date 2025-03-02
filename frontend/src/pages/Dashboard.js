@@ -54,8 +54,9 @@ const Dashboard = () => {
         const enhancedData = data.map(job => ({
           ...job, 
           daysAgo: Math.floor(Math.random() * 14),
-          yearsExp: `${Math.floor(Math.random() * 4) + 2}-${Math.floor(Math.random() * 4) + 2}`,
+          yearsExp: Math.floor(Math.random() * 5) + 1,
           candidate_count: Math.floor(Math.random() * 100) + 1,
+          lastWeekPeople: Math.floor(Math.random() * 16) + 10,
         }));
         setJobs(enhancedData);
         setJobError(null);

@@ -8,7 +8,7 @@ app = create_app()
 # Current job openings data
 JOB_POSITIONS = [
     {
-        "title": "Sr UX Designer",
+        "title": "Sr. UX Designer",
         "department": "Engineering",
         "location": "Bengaluru",
         "description": "We're looking for a frontend developer with experience in React and modern JavaScript frameworks.",
@@ -65,7 +65,7 @@ CANDIDATES = [
         "experience_years": 4.5,
         "education": "Bachelor's in Computer Science",
         "status": CandidateStatus.INTERVIEW,
-        "job_title": "Frontend Developer",
+        "job_title": "Sr. UX Designer",
         "notes": "Strong frontend skills, excellent problem solver"
     },
     {
@@ -77,7 +77,7 @@ CANDIDATES = [
         "experience_years": 5.2,
         "education": "Master's in Computer Science",
         "status": CandidateStatus.DESIGNCHALLENEG,
-        "job_title": "Backend Engineer",
+        "job_title": "Growth Manager",
         "notes": "Excellent technical skills, great system design knowledge"
     },
     {
@@ -89,7 +89,7 @@ CANDIDATES = [
         "experience_years": 7.0,
         "education": "MBA, Business Administration",
         "status": CandidateStatus.HRROUND,
-        "job_title": "Product Manager",
+        "job_title": "Financial Analyst",
         "notes": "Exceptional leadership skills, great product vision"
     },
     {
@@ -125,7 +125,7 @@ CANDIDATES = [
         "experience_years": 3.5,
         "education": "Bachelor's in Information Technology",
         "status": CandidateStatus.DESIGNCHALLENEG,
-        "job_title": "Frontend Developer",
+        "job_title": "Sr. UX Designer",
         "notes": "Good technical skills, needs improvement in code organization"
     },
     {
@@ -137,7 +137,7 @@ CANDIDATES = [
         "experience_years": 6.0,
         "education": "Master's in Software Engineering",
         "status": CandidateStatus.INTERVIEW,
-        "job_title": "Backend Engineer",
+        "job_title": "Growth Manager",
         "notes": "Excellent system design skills, good team player"
     },
     {
@@ -149,7 +149,7 @@ CANDIDATES = [
         "experience_years": 5.5,
         "education": "MBA, Product Management",
         "status": CandidateStatus.APPLIED,
-        "job_title": "Product Manager",
+        "job_title": "Financial Analyst",
         "notes": "Strong analytical approach to product decisions"
     },
     {
@@ -185,7 +185,7 @@ CANDIDATES = [
         "experience_years": 5.7,
         "education": "Bachelor's in Software Engineering",
         "status": CandidateStatus.HIRED,
-        "job_title": "Frontend Developer",
+        "job_title": "Sr. UX Designer",
         "notes": "Outstanding technical skills, great culture fit"
     },
     {
@@ -197,7 +197,7 @@ CANDIDATES = [
         "experience_years": 4.3,
         "education": "Master's in Computer Science",
         "status": CandidateStatus.HRROUND,
-        "job_title": "Backend Engineer",
+        "job_title": "Growth Manager",
         "notes": "Strong technical background, excellent communication"
     }
 ]
