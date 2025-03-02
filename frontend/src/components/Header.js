@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Box,
   Flex,
   IconButton,
   Input,
@@ -12,7 +11,6 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  Text
 } from '@chakra-ui/react';
 import { 
   FaBell, 
@@ -49,7 +47,7 @@ const Header = ({ onImportClick, onAddCandidateClick }) => {
           <FaSearch color="gray.400" />
         </InputLeftElement>
         <Input 
-          placeholder="Search candidates..." 
+          placeholder="Search candidates and jobs..." 
           value={filters.search || ''}
           onChange={handleSearchChange}
           bg="#222222"

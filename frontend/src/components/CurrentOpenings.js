@@ -17,6 +17,7 @@ import {
 import { MdLocationOn } from 'react-icons/md';
 import { PiArrowLineUpRight } from "react-icons/pi";
 import { BsPersonBadge, BsMortarboard } from 'react-icons/bs';
+import { useCandidates } from '../contexts/CandidateContext';
 
 // Function to get a color based on card index
 const getCardColor = (index) => {
@@ -37,7 +38,15 @@ const formatDaysAgo = (days) => {
     return `Posted ${days} days ago`;
 };
 
-const CurrentOpenings = ({ jobs, isLoading, error }) => {
+const CurrentOpenings = ({ jobs: propJobs, isLoading, error }) => {
+    const { filters } = useCandidates();
+    
+    // Filter jobs based on search term
+    const filteredJobs = filters.search ? 
+        propJobs.filter(job => 
+            job.title.toLowerCase().includes(filters.search.toLowerCase())
+        ) : propJobs;
+    
     return (
         <Box my={6}>
             <Heading size="md" mb={4} color="white" fontFamily="Urbanist, sans-serif" letterSpacing="widest">
@@ -51,9 +60,9 @@ const CurrentOpenings = ({ jobs, isLoading, error }) => {
                 <Card bg="#202020" borderColor="red.500" borderWidth="1px" p={4}>
                     <Text color="red.300">{error}</Text>
                 </Card>
-            ) : jobs.length === 0 ? (
+            ) : filteredJobs.length === 0 ? (
                 <Card bg="#202020" borderColor="gray.700" borderWidth="1px" p={4}>
-                    <Text>No job openings available at the moment.</Text>
+                    <Text>No job openings available matching your search.</Text>
                 </Card>
             ) : (
                 <Box
@@ -65,7 +74,7 @@ const CurrentOpenings = ({ jobs, isLoading, error }) => {
                     }}
                 >
                     <Flex direction="row" minWidth="min-content" width="100%" pb={2}>
-                        {jobs.map((job, index) => (
+                        {filteredJobs.map((job, index) => (
                             <Card
                                 key={job.id}
                                 bg="#202020"

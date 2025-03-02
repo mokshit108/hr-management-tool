@@ -2,6 +2,7 @@ from app import create_app
 from database import db
 from models import JobPosition, Candidate, CandidateStatus
 from datetime import datetime, timedelta
+import json
 
 app = create_app()
 
@@ -54,7 +55,7 @@ JOB_POSITIONS = [
     }
 ]
 
-# Candidate data with specific attributes
+# Candidate data with specific attributes including fixed applied_at dates
 CANDIDATES = [
     {
         "first_name": "John",
@@ -67,7 +68,9 @@ CANDIDATES = [
         "status": CandidateStatus.INTERVIEW,
         "job_title": "Sr. UX Designer",
         "notes": "Strong frontend skills, excellent problem solver",
-        "rating": 4.5
+        "rating": 4.5,
+        "applied_at": "2023-01-15T10:30:00",
+        "updated_at": "2025-02-20T14:45:00"
     },
     {
         "first_name": "Jane",
@@ -80,7 +83,9 @@ CANDIDATES = [
         "status": CandidateStatus.DESIGNCHALLENEG,
         "job_title": "Growth Manager",
         "notes": "Excellent technical skills, great system design knowledge",
-        "rating": 3.5
+        "rating": 3.5,
+        "applied_at": "2023-01-20T09:15:00",
+        "updated_at": "2025-02-10T11:30:00"
     },
     {
         "first_name": "Michael",
@@ -93,7 +98,9 @@ CANDIDATES = [
         "status": CandidateStatus.HRROUND,
         "job_title": "Financial Analyst",
         "notes": "Exceptional leadership skills, great product vision",
-        "rating": 2.5
+        "rating": 2.5,
+        "applied_at": "2023-01-10T13:45:00",
+        "updated_at": "2025-02-15T16:20:00"
     },
     {
         "first_name": "Emily",
@@ -106,7 +113,9 @@ CANDIDATES = [
         "status": CandidateStatus.SCREENING,
         "job_title": "Data Scientist",
         "notes": "Strong analytical skills, needs more experience with big data",
-        "rating": 1.5
+        "rating": 1.5,
+        "applied_at": "2022-02-01T08:00:00",
+        "updated_at": "2025-02-25T09:30:00"
     },
     {
         "first_name": "Carlos",
@@ -119,7 +128,9 @@ CANDIDATES = [
         "status": CandidateStatus.APPLIED,
         "job_title": "UX Designer",
         "notes": "Good portfolio, needs more experience with complex UX challenges",
-        "rating": 3.3
+        "rating": 3.3,
+        "applied_at": "2023-02-28T15:20:00",
+        "updated_at": "2025-02-28T15:20:00"
     },
     {
         "first_name": "Sarah",
@@ -132,7 +143,9 @@ CANDIDATES = [
         "status": CandidateStatus.DESIGNCHALLENEG,
         "job_title": "Sr. UX Designer",
         "notes": "Good technical skills, needs improvement in code organization",
-        "rating": 4.2
+        "rating": 4.2,
+        "applied_at": "2022-01-25T11:10:00",
+        "updated_at": "2025-02-18T13:40:00"
     },
     {
         "first_name": "David",
@@ -145,7 +158,9 @@ CANDIDATES = [
         "status": CandidateStatus.INTERVIEW,
         "job_title": "Growth Manager",
         "notes": "Excellent system design skills, good team player",
-        "rating": 2.7
+        "rating": 2.7,
+        "applied_at": "2023-01-05T10:00:00",
+        "updated_at": "2025-02-12T16:30:00"
     },
     {
         "first_name": "Lisa",
@@ -158,7 +173,9 @@ CANDIDATES = [
         "status": CandidateStatus.ACCEPTED,
         "job_title": "Financial Analyst",
         "notes": "Strong analytical approach to product decisions",
-        "rating": 2.6
+        "rating": 2.6,
+        "applied_at": "2022-01-12T14:25:00",
+        "updated_at": "2025-02-22T11:15:00"
     },
     {
         "first_name": "Kevin",
@@ -171,7 +188,9 @@ CANDIDATES = [
         "status": CandidateStatus.REJECTED,
         "job_title": "Data Scientist",
         "notes": "Good theoretical knowledge but lacks practical experience",
-        "rating": 1.7
+        "rating": 1.7,
+        "applied_at": "2023-01-18T09:45:00",
+        "updated_at": "2025-02-14T10:20:00"
     },
     {
         "first_name": "Maria",
@@ -184,7 +203,9 @@ CANDIDATES = [
         "status": CandidateStatus.INTERVIEW,
         "job_title": "UX Designer",
         "notes": "Great design thinking process, excellent portfolio",
-        "rating": 1.7
+        "rating": 1.7,
+        "applied_at": "2024-01-30T13:15:00",
+        "updated_at": "2025-02-27T15:40:00"
     },
     {
         "first_name": "Alex",
@@ -197,7 +218,9 @@ CANDIDATES = [
         "status": CandidateStatus.HIRED,
         "job_title": "Sr. UX Designer",
         "notes": "Outstanding technical skills, great culture fit",
-        "rating": 4.2
+        "rating": 4.2,
+        "applied_at": "2024-01-03T08:30:00",
+        "updated_at": "2025-02-25T17:00:00"
     },
     {
         "first_name": "Sophia",
@@ -210,7 +233,9 @@ CANDIDATES = [
         "status": CandidateStatus.HRROUND,
         "job_title": "Growth Manager",
         "notes": "Strong technical background, excellent communication",
-        "rating": 4.8
+        "rating": 4.8,
+        "applied_at": "2023-01-08T11:20:00",
+        "updated_at": "2025-02-16T14:10:00"
     }
 ]
 
@@ -238,19 +263,9 @@ def create_seed_data():
         for candidate_data in CANDIDATES:
             job_title = candidate_data.pop("job_title")  # Remove job_title from dict
             
-            # Set applied date based on status
-            status_days = {
-                CandidateStatus.APPLIED: 1,
-                CandidateStatus.SCREENING: 5,
-                CandidateStatus.DESIGNCHALLENEG: 10,
-                CandidateStatus.INTERVIEW: 15,
-                CandidateStatus.HRROUND: 20,
-                CandidateStatus.HIRED: 30,
-                CandidateStatus.REJECTED: 25
-            }
-            
-            applied_at = datetime.utcnow() - timedelta(days=status_days.get(candidate_data["status"], 1))
-            updated_at = datetime.utcnow() - timedelta(days=max(0, status_days.get(candidate_data["status"], 1) - 1))
+            # Convert datetime string to datetime object
+            applied_at = datetime.fromisoformat(candidate_data.pop("applied_at"))
+            updated_at = datetime.fromisoformat(candidate_data.pop("updated_at"))
             
             # Create candidate
             candidate = Candidate(

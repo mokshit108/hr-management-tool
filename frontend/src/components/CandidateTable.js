@@ -131,14 +131,25 @@ const CandidateTable = () => {
     return sortedCandidates;
   };
   
-  // Filter candidates based on active tab
+  // Filter candidates based on active tab and year filter
   const getFilteredCandidates = () => {
     const filtered = candidates.filter(candidate => {
       const statusValue = getStatusValue(candidate.status);
       
-      if (activeTab === 'all') return true;
-      if (activeTab === 'accepted') return statusValue === 'accepted';
-      if (activeTab === 'rejected') return statusValue === 'rejected';
+      // Apply tab filter
+      const passesTabFilter = 
+        activeTab === 'all' || 
+        (activeTab === 'accepted' && statusValue === 'accepted') ||
+        (activeTab === 'rejected' && statusValue === 'rejected');
+      
+      if (!passesTabFilter) return false;
+      
+      // Apply year filter
+      if (filters.year) {
+        const appliedYear = new Date(candidate.applied_at).getFullYear().toString();
+        return appliedYear === filters.year;
+      }
+      
       return true;
     });
     
@@ -239,7 +250,11 @@ const CandidateTable = () => {
         ) : filteredCandidates.length === 0 ? (
           <Box p={8} textAlign="center" color="gray.400">
             <Text fontSize="lg">No candidates found</Text>
-            <Text fontSize="sm" mt={2}>Try adjusting your filters or import new candidates</Text>
+            <Text fontSize="sm" mt={2}>
+              {filters.year ? 
+                `No candidates found for year ${filters.year}. Try selecting a different year.` : 
+                'Try adjusting your filters or import new candidates'}
+            </Text>
           </Box>
         ) : (
           <Box overflowX="auto" p={4} mb={3}>
@@ -369,7 +384,12 @@ const CandidateTable = () => {
                       <StatusBadge status={candidate.status} />
                     </Td>
                     <Td borderColor="transparent" py={4} px={6}>{candidate.job_title}</Td>
-                    <Td borderColor="transparent" py={4} px={6}>{formatDate(candidate.applied_at)}</Td>
+                    <Td borderColor="transparent" py={4} px={6}>
+                      {formatDate(candidate.applied_at)}
+                      {filters.year && (
+                        <Text fontSize="xs" color="gray.500">{new Date(candidate.applied_at).getFullYear()}</Text>
+                      )}
+                    </Td>
                     <Td borderColor="transparent" py={4} px={6}>
                       <Flex align="center">
                         <Icon as={FiPaperclip} mr={2} />
@@ -466,6 +486,7 @@ const CandidateTable = () => {
                     <GridItem>
                       <Text color="gray.400" fontSize="xs">Application Date</Text>
                       <Text fontSize="sm">{formatDate(selectedCandidate.applied_at)}</Text>
+                      <Text fontSize="xs" color="gray.500">{new Date(selectedCandidate.applied_at).getFullYear()}</Text>
                     </GridItem>
                     <GridItem>
                       <Text color="gray.400" fontSize="xs">Source</Text>

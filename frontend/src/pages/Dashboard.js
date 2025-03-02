@@ -8,13 +8,19 @@ import {
   useToast,
   Select,
   HStack,
-  Text
+  Text,
+  Menu, 
+  MenuButton, 
+  MenuList, 
+  MenuItem, 
+  Button
 } from '@chakra-ui/react';
 import { useCandidates } from '../contexts/CandidateContext';
 import CandidateTable from '../components/CandidateTable';
 import CandidateModal from '../components/CandidateModal';
 import ImportCandidateModal from '../components/ImportCandidateModal';
 import CurrentOpenings from '../components/CurrentOpenings';
+import { FaSortDown } from "react-icons/fa";
 
 const Dashboard = () => {
   const { candidates, isLoading: isCandidatesLoading, filters, updateFilters } = useCandidates();
@@ -23,13 +29,13 @@ const Dashboard = () => {
   const [isJobsLoading, setIsJobsLoading] = useState(true);
   const [jobError, setJobError] = useState(null);
   const toast = useToast();
-  
+
   const {
     isOpen: isAddEditOpen,
     onOpen: onAddEditOpen,
     onClose: onAddEditClose,
   } = useDisclosure();
-  
+
   const {
     isOpen: isImportOpen,
     onOpen: onImportOpen,
@@ -38,8 +44,8 @@ const Dashboard = () => {
 
   // Generate years for filter (current year and 4 years back)
   const currentYear = new Date().getFullYear();
-  const years = Array.from({length: 5}, (_, i) => currentYear - i);
-  
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+
   const handleYearFilterChange = (e) => {
     updateFilters({ year: e.target.value });
   };
@@ -50,15 +56,15 @@ const Dashboard = () => {
       try {
         setIsJobsLoading(true);
         const response = await fetch('http://localhost:5000/api/jobs');
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         // Ensure years of experience is between 2-5
         const enhancedData = data.map(job => ({
-          ...job, 
+          ...job,
           daysAgo: Math.floor(Math.random() * 14),
           yearsExp: Math.floor(Math.random() * 5) + 1,
           candidate_count: Math.floor(Math.random() * 100) + 1,
@@ -99,44 +105,68 @@ const Dashboard = () => {
       <Container maxW="container.xl">
         <Flex direction="column" gap={6}>
           {/* Using the CurrentOpenings component */}
-          <CurrentOpenings 
-            jobs={jobs} 
-            isLoading={isJobsLoading} 
-            error={jobError} 
+          <CurrentOpenings
+            jobs={jobs}
+            isLoading={isJobsLoading}
+            error={jobError}
           />
 
           <Box mt={6}>
             <Flex justifyContent="space-between" alignItems="center" mb={4}>
-               <Heading size="md" mb={2} color="white" fontFamily="Urbanist, sans-serif" letterSpacing="widest">
+              <Heading size="md" mb={2} color="white" fontFamily="Urbanist, sans-serif" letterSpacing="widest">
                 Candidates
-                </Heading>
-              
+              </Heading>
+
               {/* Years filter moved to Dashboard */}
-              <HStack spacing={4}>
-                <Box width="150px">
-                  <Select 
-                    value={filters.year || ''}
-                    onChange={handleYearFilterChange}
-                    bg="#252525"
-                    borderColor="gray.700"
-                    _hover={{
-                      borderColor: "gray.600"
-                    }}
-                    color="white"
-                    size="sm"
-                  >
-                    <option value="">All Years</option>
-                    {years.map(year => (
-                      <option key={year} value={year.toString()}>{year}</option>
-                    ))}
-                  </Select>
-                </Box>
+              <HStack spacing={1}>
+              <Box width="90px" mr={12}>
+  <Menu>
+    {/* Button to open the dropdown */}
+    <MenuButton
+      as={Button}
+      rightIcon={<FaSortDown style={{ paddingBottom: "2px", height: "20px" }} />}
+      bg="#252525"
+      color="#898989"
+      border="1px solid"
+      borderColor="gray.700"
+      _hover={{ borderColor: "gray.600" }}
+      _expanded={{ bg: "#252525", color: "#898989" }} // Prevents color change when clicked
+      _focus={{ boxShadow: "none" }} // Removes focus outline
+      size="sm"
+      borderRadius="full" // Rounded button
+    >
+      {filters.year || "Select Year"}
+    </MenuButton>
+
+    {/* Custom dropdown with rounded corners */}
+    <MenuList
+      bg="#252525"
+      color="#898989"
+      borderRadius="12px" // Curved dropdown
+      border="1px solid gray"
+      boxShadow="md"
+      p={1}
+    >
+      {years.map((year) => (
+        <MenuItem
+          key={year}
+          onClick={() => handleYearFilterChange({ target: { value: year } })}
+          bg="transparent"
+          _hover={{ bg: "gray.700", borderRadius: "8px" }} // Curve hover effect
+          fontWeight="100"
+        >
+          {year}
+        </MenuItem>
+      ))}
+    </MenuList>
+  </Menu>
+</Box>;
               </HStack>
             </Flex>
-            
+
             {/* CandidateTable with internal tabs implementation */}
-            <CandidateTable 
-              isLoading={isCandidatesLoading} 
+            <CandidateTable
+              isLoading={isCandidatesLoading}
               onEditCandidate={handleEditCandidate}
               onAddCandidate={handleAddCandidate}
               tableProps={{
@@ -151,13 +181,13 @@ const Dashboard = () => {
             />
           </Box>
         </Flex>
-        
+
         <CandidateModal
           isOpen={isAddEditOpen}
           onClose={onAddEditClose}
           candidate={selectedCandidate}
         />
-        
+
         <ImportCandidateModal
           isOpen={isImportOpen}
           onClose={onImportClose}
