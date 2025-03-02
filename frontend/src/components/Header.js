@@ -11,16 +11,17 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
+  Box,
 } from '@chakra-ui/react';
 import { 
-  FaBell, 
-  FaSearch, 
-  FaUserCircle, 
-  FaCog, 
+  FaRegBell, 
   FaSignOutAlt, 
   FaUserPlus,
   FaPlus
 } from 'react-icons/fa';
+import { SlSettings } from "react-icons/sl";
+
+import { CiSearch } from "react-icons/ci";
 import { useCandidates } from '../contexts/CandidateContext';
 
 const Header = ({ onImportClick, onAddCandidateClick }) => {
@@ -44,7 +45,7 @@ const Header = ({ onImportClick, onAddCandidateClick }) => {
     >
       <InputGroup maxW="400px" display={{ base: 'none', md: 'block' }}>
         <InputLeftElement pointerEvents="none">
-          <FaSearch color="gray.400" />
+          <CiSearch color="gray.400" />
         </InputLeftElement>
         <Input 
           placeholder="Search candidates and jobs..." 
@@ -53,6 +54,7 @@ const Header = ({ onImportClick, onAddCandidateClick }) => {
           bg="#222222"
           border="1px solid"
           borderColor="gray.700"
+          borderRadius="full"
           _hover={{
             borderColor: "gray.600"
           }}
@@ -64,31 +66,43 @@ const Header = ({ onImportClick, onAddCandidateClick }) => {
       </InputGroup>
 
       <Flex align="center" gap={4}>
-        <IconButton
-          icon={<FaBell />}
-          variant="ghost"
-          aria-label="Notifications"
-          fontSize="20px"
-          color="gray.400"
-          _hover={{
-            bg: "gray.700",
-            color: "white"
-          }}
-        />
+        <Box
+          bg="#222222"
+          borderRadius="full"
+          p={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <IconButton
+            icon={<FaRegBell />}
+            color="#898989"
+            variant="unstyled"
+            aria-label="Notifications"
+            fontSize="16px"
+            
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            h="auto"
+            minW="auto"
+          />
+        </Box>
         
         <Menu>
           <MenuButton
-            as={IconButton}
-            icon={<FaCog />}
-            variant="ghost"
-            aria-label="Settings"
-            fontSize="20px"
-            color="gray.400"
-            _hover={{
-              bg: "gray.700",
-              color: "white"
-            }}
-          />
+            as={Box}
+            bg="#222222"
+            color="#898989"
+            borderRadius="full"
+            p={2}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            cursor="pointer"
+          >
+            <SlSettings color fontSize="16px" />
+          </MenuButton>
           <MenuList 
             bg="#202020" 
             borderColor="gray.700" 
@@ -115,7 +129,7 @@ const Header = ({ onImportClick, onAddCandidateClick }) => {
             </MenuItem>
             <MenuDivider borderColor="gray.700" />
             <MenuItem 
-              icon={<FaCog />}
+              icon={<SlSettings />}
               _hover={{ bg: "gray.700" }}
               bg="#202020"
               color="white"
@@ -127,7 +141,7 @@ const Header = ({ onImportClick, onAddCandidateClick }) => {
         
         <Menu>
           <MenuButton>
-            <Avatar size="sm" name="User" bg="blue.500" />
+            <Avatar size="sm" src="/images/profile.png" name="User" bg="blue.500" />
           </MenuButton>
           <MenuList 
             bg="#202020" 
@@ -136,12 +150,14 @@ const Header = ({ onImportClick, onAddCandidateClick }) => {
             boxShadow="0px 5px 15px rgba(0, 0, 0, 0.5)"
           >
             <MenuItem 
-              icon={<FaUserCircle />}
               _hover={{ bg: "gray.700" }}
               bg="#202020"
               color="white"
             >
-              Profile
+              <Flex align="center" gap={2}>
+                <Avatar size="xs" src="/images/profile.png" />
+                Profile
+              </Flex>
             </MenuItem>
             <MenuItem 
               icon={<FaSignOutAlt />}

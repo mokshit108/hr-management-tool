@@ -6,9 +6,7 @@ import {
   Heading,
   useDisclosure,
   useToast,
-  Select,
   HStack,
-  Text,
   Menu, 
   MenuButton, 
   MenuList, 
@@ -46,8 +44,9 @@ const Dashboard = () => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
 
-  const handleYearFilterChange = (e) => {
-    updateFilters({ year: e.target.value });
+  const handleYearFilterChange = (year) => {
+    // Convert year to string to ensure consistency
+    updateFilters({ year: year.toString() });
   };
 
   // Fetch jobs from API
@@ -119,48 +118,57 @@ const Dashboard = () => {
 
               {/* Years filter moved to Dashboard */}
               <HStack spacing={1}>
-              <Box width="90px" mr={12}>
-  <Menu>
-    {/* Button to open the dropdown */}
-    <MenuButton
-      as={Button}
-      rightIcon={<FaSortDown style={{ paddingBottom: "2px", height: "20px" }} />}
-      bg="#252525"
-      color="#898989"
-      border="1px solid"
-      borderColor="gray.700"
-      _hover={{ borderColor: "gray.600" }}
-      _expanded={{ bg: "#252525", color: "#898989" }} // Prevents color change when clicked
-      _focus={{ boxShadow: "none" }} // Removes focus outline
-      size="sm"
-      borderRadius="full" // Rounded button
-    >
-      {filters.year || "Select Year"}
-    </MenuButton>
+                <Box width="90px" mr={12}>
+                  <Menu>
+                    {/* Button to open the dropdown */}
+                    <MenuButton
+                      as={Button}
+                      rightIcon={<FaSortDown style={{ paddingBottom: "2px", height: "20px" }} />}
+                      bg="#252525"
+                      color="#898989"
+                      border="1px solid"
+                      borderColor="gray.700"
+                      _hover={{ borderColor: "gray.600" }}
+                      _expanded={{ bg: "#252525", color: "#898989" }} // Prevents color change when clicked
+                      _focus={{ boxShadow: "none" }} // Removes focus outline
+                      size="sm"
+                      borderRadius="full" // Rounded button
+                    >
+                      {filters.year || "Select Year"}
+                    </MenuButton>
 
-    {/* Custom dropdown with rounded corners */}
-    <MenuList
-      bg="#252525"
-      color="#898989"
-      borderRadius="12px" // Curved dropdown
-      border="1px solid gray"
-      boxShadow="md"
-      p={1}
-    >
-      {years.map((year) => (
-        <MenuItem
-          key={year}
-          onClick={() => handleYearFilterChange({ target: { value: year } })}
-          bg="transparent"
-          _hover={{ bg: "gray.700", borderRadius: "8px" }} // Curve hover effect
-          fontWeight="100"
-        >
-          {year}
-        </MenuItem>
-      ))}
-    </MenuList>
-  </Menu>
-</Box>;
+                    {/* Custom dropdown with rounded corners */}
+                    <MenuList
+                      bg="#252525"
+                      color="#898989"
+                      borderRadius="12px" // Curved dropdown
+                      border="1px solid gray"
+                      boxShadow="md"
+                      p={1}
+                    >
+                      <MenuItem
+                        key="all"
+                        onClick={() => handleYearFilterChange("")}
+                        bg="transparent"
+                        _hover={{ bg: "gray.700", borderRadius: "8px" }}
+                        fontWeight="100"
+                      >
+                        All Years
+                      </MenuItem>
+                      {years.map((year) => (
+                        <MenuItem
+                          key={year}
+                          onClick={() => handleYearFilterChange(year)}
+                          bg="transparent"
+                          _hover={{ bg: "gray.700", borderRadius: "8px" }} // Curve hover effect
+                          fontWeight="100"
+                        >
+                          {year}
+                        </MenuItem>
+                      ))}
+                    </MenuList>
+                  </Menu>
+                </Box>
               </HStack>
             </Flex>
 

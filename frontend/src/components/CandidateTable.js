@@ -17,22 +17,14 @@ import {
   Icon,
   HStack,
   Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  VStack,
-  Avatar,
-  Badge,
-  Grid,
-  GridItem
+  VStack
 } from '@chakra-ui/react';
-import { FiChevronUp, FiChevronDown, FiPaperclip, FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
+import { FiChevronUp, FiChevronDown, FiPaperclip } from 'react-icons/fi';
 import { FaStar, FaSort } from "react-icons/fa";
 import { useCandidates } from '../contexts/CandidateContext';
 import { useNavigate } from 'react-router-dom';
 import StatusBadge from './StatusBadge';
+import CandidateSidebar from './CandidateSidebar';
 
 const CandidateTable = () => {
   const { 
@@ -144,10 +136,10 @@ const CandidateTable = () => {
       
       if (!passesTabFilter) return false;
       
-      // Apply year filter
-      if (filters.year) {
+      // Apply year filter - Fixed to properly compare strings
+      if (filters.year && filters.year !== '') {
         const appliedYear = new Date(candidate.applied_at).getFullYear().toString();
-        return appliedYear === filters.year;
+        return appliedYear === filters.year.toString();
       }
       
       return true;
@@ -404,164 +396,18 @@ const CandidateTable = () => {
         )}
       </Box>
 
-      {/* Candidate Details Sidebar - Now on right side with 25% width */}
+      {/* Candidate Details Sidebar using the modularized component */}
       <Drawer
         isOpen={isSidebarOpen}
         placement="right"
         onClose={() => setIsSidebarOpen(false)}
         size="xs"
       >
-        <DrawerOverlay />
-        <DrawerContent 
-          bg="#202020" 
-          color="white" 
-          maxWidth="25%"
-        >
-          <DrawerCloseButton color="white" />
-          <DrawerHeader borderBottomWidth="1px" borderColor="#333" pb={4}>
-            Candidate Profile
-          </DrawerHeader>
-
-          <DrawerBody>
-            {selectedCandidate && (
-              <VStack spacing={6} align="stretch" pt={4}>
-                {/* Profile Header */}
-                <Flex direction="column" align="center" mb={4}>
-                  <Avatar 
-                    size="lg" 
-                    name={`${selectedCandidate.first_name} ${selectedCandidate.last_name}`} 
-                    bg="purple.500"
-                    mb={4}
-                  />
-                  <Text fontSize="xl" fontWeight="bold" textAlign="center">
-                    {selectedCandidate.first_name} {selectedCandidate.last_name}
-                  </Text>
-                  <Text color="gray.400" fontSize="sm" textAlign="center">
-                    {selectedCandidate.job_title}
-                  </Text>
-                  <HStack mt={2} spacing={2}>
-                    <Icon as={FaStar} color="yellow.400" />
-                    <Text>{selectedCandidate.rating ? selectedCandidate.rating.toFixed(1) : "N/A"}</Text>
-                  </HStack>
-                  <Box mt={3}>
-                    <StatusBadge status={selectedCandidate.status} />
-                  </Box>
-                </Flex>
-
-                <Divider borderColor="#333" />
-
-                {/* Contact Information */}
-                <Box>
-                  <Text fontSize="md" fontWeight="semibold" mb={3}>
-                    Contact Information
-                  </Text>
-                  <VStack spacing={3} align="stretch">
-                    <HStack spacing={3}>
-                      <Icon as={FiMail} color="gray.400" />
-                      <Text fontSize="sm">{selectedCandidate.email || 'candidate@example.com'}</Text>
-                    </HStack>
-                    <HStack spacing={3}>
-                      <Icon as={FiPhone} color="gray.400" />
-                      <Text fontSize="sm">{selectedCandidate.phone || '+1 (555) 123-4567'}</Text>
-                    </HStack>
-                    <HStack spacing={3}>
-                      <Icon as={FiMapPin} color="gray.400" />
-                      <Text fontSize="sm">{selectedCandidate.location || 'San Francisco, CA'}</Text>
-                    </HStack>
-                  </VStack>
-                </Box>
-
-                <Divider borderColor="#333" />
-
-                {/* Application Details */}
-                <Box>
-                  <Text fontSize="md" fontWeight="semibold" mb={3}>
-                    Application Details
-                  </Text>
-                  <Grid templateColumns="repeat(1, 1fr)" gap={3}>
-                    <GridItem>
-                      <Text color="gray.400" fontSize="xs">Applied Role</Text>
-                      <Text fontSize="sm">{selectedCandidate.job_title}</Text>
-                    </GridItem>
-                    <GridItem>
-                      <Text color="gray.400" fontSize="xs">Application Date</Text>
-                      <Text fontSize="sm">{formatDate(selectedCandidate.applied_at)}</Text>
-                      <Text fontSize="xs" color="gray.500">{new Date(selectedCandidate.applied_at).getFullYear()}</Text>
-                    </GridItem>
-                    <GridItem>
-                      <Text color="gray.400" fontSize="xs">Source</Text>
-                      <Text fontSize="sm">{selectedCandidate.source || 'LinkedIn'}</Text>
-                    </GridItem>
-                    <GridItem>
-                      <Text color="gray.400" fontSize="xs">Referral</Text>
-                      <Text fontSize="sm">{selectedCandidate.referral || 'N/A'}</Text>
-                    </GridItem>
-                  </Grid>
-                </Box>
-
-                <Divider borderColor="#333" />
-
-                {/* Attachments */}
-                <Box>
-                  <Text fontSize="md" fontWeight="semibold" mb={3}>
-                    Attachments
-                  </Text>
-                  <VStack align="stretch" spacing={3}>
-                    <HStack p={2} bg="#252525" borderRadius="md" justify="space-between">
-                      <HStack>
-                        <Icon as={FiPaperclip} fontSize="sm" />
-                        <Text fontSize="sm">Resume.pdf</Text>
-                      </HStack>
-                      <Badge colorScheme="blue" fontSize="xs">Resume</Badge>
-                    </HStack>
-                    <HStack p={2} bg="#252525" borderRadius="md" justify="space-between">
-                      <HStack>
-                        <Icon as={FiPaperclip} fontSize="sm" />
-                        <Text fontSize="sm">Cover_Letter.pdf</Text>
-                      </HStack>
-                      <Badge colorScheme="purple" fontSize="xs">Cover Letter</Badge>
-                    </HStack>
-                  </VStack>
-                </Box>
-
-                <Divider borderColor="#333" />
-
-                {/* Experience */}
-                <Box>
-                  <Text fontSize="md" fontWeight="semibold" mb={3}>
-                    Experience
-                  </Text>
-                  <VStack align="stretch" spacing={3}>
-                    <Box>
-                      <Text fontWeight="medium" fontSize="sm">Senior Developer</Text>
-                      <Text color="gray.400" fontSize="sm">TechCorp Inc.</Text>
-                      <Text fontSize="xs" color="gray.500">Jan 2020 - Present</Text>
-                    </Box>
-                    <Box>
-                      <Text fontWeight="medium" fontSize="sm">Frontend Developer</Text>
-                      <Text color="gray.400" fontSize="sm">WebSolutions</Text>
-                      <Text fontSize="xs" color="gray.500">Mar 2017 - Dec 2019</Text>
-                    </Box>
-                  </VStack>
-                </Box>
-
-                <Divider borderColor="#333" />
-
-                {/* Education */}
-                <Box>
-                  <Text fontSize="md" fontWeight="semibold" mb={3}>
-                    Education
-                  </Text>
-                  <Box>
-                    <Text fontWeight="medium" fontSize="sm">Bachelor of Science in Computer Science</Text>
-                    <Text color="gray.400" fontSize="sm">University of Technology</Text>
-                    <Text fontSize="xs" color="gray.500">2013 - 2017</Text>
-                  </Box>
-                </Box>
-              </VStack>
-            )}
-          </DrawerBody>
-        </DrawerContent>
+        <CandidateSidebar 
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+          candidate={selectedCandidate}
+        />
       </Drawer>
     </>
   );
