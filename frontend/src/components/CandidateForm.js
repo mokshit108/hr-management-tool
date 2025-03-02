@@ -114,6 +114,7 @@ const CandidateForm = ({ candidate, onSubmit, onCancel }) => {
             <option value="interview">Interview</option>
             <option value="hrround">HR Round</option>
             <option value="hired">Hired</option>
+            <option value="accepted">Accepted</option>
             <option value="rejected">Rejected</option>
           </Select>
           <FormErrorMessage>{formik.errors.status}</FormErrorMessage>

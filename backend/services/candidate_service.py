@@ -14,6 +14,7 @@ class CandidateSchema(Schema):
     education = fields.Str()
     job_position_id = fields.Int(required=True)
     notes = fields.Str()
+    rating = fields.Float()
     applied_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
     
@@ -33,7 +34,8 @@ class CandidateService:
                 (Candidate.first_name.ilike(search_term)) | 
                 (Candidate.last_name.ilike(search_term)) |
                 (Candidate.email.ilike(search_term)) |
-                (Candidate.skills.ilike(search_term))
+                (Candidate.skills.ilike(search_term)) |
+                (Candidate.rating.ilike(search_term))
             )
         
         # Apply status filter
@@ -71,7 +73,8 @@ class CandidateService:
             experience_years=candidate_data.get('experience_years'),
             education=candidate_data.get('education'),
             job_position_id=candidate_data['job_position_id'],
-            notes=candidate_data.get('notes')
+            notes=candidate_data.get('notes'),
+            rating=candidate_data.get('rating')
         )
         
         db.session.add(new_candidate)
@@ -107,7 +110,8 @@ class CandidateService:
                 experience_years=candidate_data.get('experience_years'),
                 education=candidate_data.get('education'),
                 job_position_id=candidate_data['job_position_id'],
-                notes=candidate_data.get('notes')
+                notes=candidate_data.get('notes'),
+                rating=candidate_data.get('rating')
             )
             db.session.add(new_candidate)
             candidates.append(new_candidate)

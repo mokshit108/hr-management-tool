@@ -11,6 +11,7 @@ def get_candidates():
     status = request.args.get('status', '')
     sort_by = request.args.get('sort_by', 'applied_at')
     sort_order = request.args.get('sort_order', 'desc')
+
     
     candidates = CandidateService.get_all_candidates(
         search=search, 

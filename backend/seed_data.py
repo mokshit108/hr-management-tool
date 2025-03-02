@@ -66,7 +66,8 @@ CANDIDATES = [
         "education": "Bachelor's in Computer Science",
         "status": CandidateStatus.INTERVIEW,
         "job_title": "Sr. UX Designer",
-        "notes": "Strong frontend skills, excellent problem solver"
+        "notes": "Strong frontend skills, excellent problem solver",
+        "rating": 4.5
     },
     {
         "first_name": "Jane",
@@ -78,7 +79,8 @@ CANDIDATES = [
         "education": "Master's in Computer Science",
         "status": CandidateStatus.DESIGNCHALLENEG,
         "job_title": "Growth Manager",
-        "notes": "Excellent technical skills, great system design knowledge"
+        "notes": "Excellent technical skills, great system design knowledge",
+        "rating": 3.5
     },
     {
         "first_name": "Michael",
@@ -90,7 +92,8 @@ CANDIDATES = [
         "education": "MBA, Business Administration",
         "status": CandidateStatus.HRROUND,
         "job_title": "Financial Analyst",
-        "notes": "Exceptional leadership skills, great product vision"
+        "notes": "Exceptional leadership skills, great product vision",
+        "rating": 2.5
     },
     {
         "first_name": "Emily",
@@ -102,7 +105,8 @@ CANDIDATES = [
         "education": "PhD in Computer Science",
         "status": CandidateStatus.SCREENING,
         "job_title": "Data Scientist",
-        "notes": "Strong analytical skills, needs more experience with big data"
+        "notes": "Strong analytical skills, needs more experience with big data",
+        "rating": 1.5
     },
     {
         "first_name": "Carlos",
@@ -114,7 +118,8 @@ CANDIDATES = [
         "education": "Bachelor's in Design",
         "status": CandidateStatus.APPLIED,
         "job_title": "UX Designer",
-        "notes": "Good portfolio, needs more experience with complex UX challenges"
+        "notes": "Good portfolio, needs more experience with complex UX challenges",
+        "rating": 3.3
     },
     {
         "first_name": "Sarah",
@@ -126,7 +131,8 @@ CANDIDATES = [
         "education": "Bachelor's in Information Technology",
         "status": CandidateStatus.DESIGNCHALLENEG,
         "job_title": "Sr. UX Designer",
-        "notes": "Good technical skills, needs improvement in code organization"
+        "notes": "Good technical skills, needs improvement in code organization",
+        "rating": 4.2
     },
     {
         "first_name": "David",
@@ -138,7 +144,8 @@ CANDIDATES = [
         "education": "Master's in Software Engineering",
         "status": CandidateStatus.INTERVIEW,
         "job_title": "Growth Manager",
-        "notes": "Excellent system design skills, good team player"
+        "notes": "Excellent system design skills, good team player",
+        "rating": 2.7
     },
     {
         "first_name": "Lisa",
@@ -148,9 +155,10 @@ CANDIDATES = [
         "skills": "Product Analytics, A/B Testing, Product Strategy, User Stories",
         "experience_years": 5.5,
         "education": "MBA, Product Management",
-        "status": CandidateStatus.APPLIED,
+        "status": CandidateStatus.ACCEPTED,
         "job_title": "Financial Analyst",
-        "notes": "Strong analytical approach to product decisions"
+        "notes": "Strong analytical approach to product decisions",
+        "rating": 2.6
     },
     {
         "first_name": "Kevin",
@@ -162,7 +170,8 @@ CANDIDATES = [
         "education": "Master's in Data Science",
         "status": CandidateStatus.REJECTED,
         "job_title": "Data Scientist",
-        "notes": "Good theoretical knowledge but lacks practical experience"
+        "notes": "Good theoretical knowledge but lacks practical experience",
+        "rating": 1.7
     },
     {
         "first_name": "Maria",
@@ -174,7 +183,8 @@ CANDIDATES = [
         "education": "Bachelor's in Interaction Design",
         "status": CandidateStatus.INTERVIEW,
         "job_title": "UX Designer",
-        "notes": "Great design thinking process, excellent portfolio"
+        "notes": "Great design thinking process, excellent portfolio",
+        "rating": 1.7
     },
     {
         "first_name": "Alex",
@@ -186,7 +196,8 @@ CANDIDATES = [
         "education": "Bachelor's in Software Engineering",
         "status": CandidateStatus.HIRED,
         "job_title": "Sr. UX Designer",
-        "notes": "Outstanding technical skills, great culture fit"
+        "notes": "Outstanding technical skills, great culture fit",
+        "rating": 4.2
     },
     {
         "first_name": "Sophia",
@@ -198,7 +209,8 @@ CANDIDATES = [
         "education": "Master's in Computer Science",
         "status": CandidateStatus.HRROUND,
         "job_title": "Growth Manager",
-        "notes": "Strong technical background, excellent communication"
+        "notes": "Strong technical background, excellent communication",
+        "rating": 4.8
     }
 ]
 

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify
 from flask_cors import CORS
+from flask_migrate import Migrate
 from datetime import datetime
 import os
 
@@ -14,14 +15,16 @@ def create_app(config_class=Config):
     # Initialize extensions
     db.init_app(app)
     CORS(app)
-    
+    migrate = Migrate(app, db)  # Add Flask-Migrate
+
     # Register blueprints
     app.register_blueprint(candidates_bp)
     app.register_blueprint(jobs_bp)
     
-    # Create database tables
+    # Create database tables only if running in development
     with app.app_context():
-        db.create_all()
+        if app.config['ENV'] == 'development':
+            db.create_all()
     
     # Default route
     @app.route('/')

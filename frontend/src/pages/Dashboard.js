@@ -5,12 +5,10 @@ import {
   Flex,
   Heading,
   useDisclosure,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  useToast
+  useToast,
+  Select,
+  HStack,
+  Text
 } from '@chakra-ui/react';
 import { useCandidates } from '../contexts/CandidateContext';
 import CandidateTable from '../components/CandidateTable';
@@ -19,7 +17,7 @@ import ImportCandidateModal from '../components/ImportCandidateModal';
 import CurrentOpenings from '../components/CurrentOpenings';
 
 const Dashboard = () => {
-  const { candidates, isLoading: isCandidatesLoading } = useCandidates();
+  const { candidates, isLoading: isCandidatesLoading, filters, updateFilters } = useCandidates();
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [jobs, setJobs] = useState([]);
   const [isJobsLoading, setIsJobsLoading] = useState(true);
@@ -37,6 +35,14 @@ const Dashboard = () => {
     onOpen: onImportOpen,
     onClose: onImportClose,
   } = useDisclosure();
+
+  // Generate years for filter (current year and 4 years back)
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({length: 5}, (_, i) => currentYear - i);
+  
+  const handleYearFilterChange = (e) => {
+    updateFilters({ year: e.target.value });
+  };
 
   // Fetch jobs from API
   useEffect(() => {
@@ -78,7 +84,6 @@ const Dashboard = () => {
     fetchJobs();
   }, [toast]);
 
-
   const handleEditCandidate = (candidate) => {
     setSelectedCandidate(candidate);
     onAddEditOpen();
@@ -88,23 +93,12 @@ const Dashboard = () => {
     setSelectedCandidate(null);
     onAddEditOpen();
   };
-  
-  const candidateStats = {
-    total: candidates.length,
-    applied: candidates.filter(c => c.status === 'applied').length,
-    screening: candidates.filter(c => c.status === 'screening').length,
-    designchallenge: candidates.filter(c => c.status === 'designchallenge').length,
-    interview: candidates.filter(c => c.status === 'interview').length,
-    hrround: candidates.filter(c => c.status === 'hrround').length,
-    hired: candidates.filter(c => c.status === 'hired').length,
-    rejected: candidates.filter(c => c.status === 'rejected').length,
-  };
 
   return (
     <Box bg="#151515" minH="100vh" color="white" fontFamily="Urbanist, sans-serif">
       <Container maxW="container.xl">
         <Flex direction="column" gap={6}>
-          {/* Using the new CurrentOpenings component */}
+          {/* Using the CurrentOpenings component */}
           <CurrentOpenings 
             jobs={jobs} 
             isLoading={isJobsLoading} 
@@ -112,68 +106,49 @@ const Dashboard = () => {
           />
 
           <Box mt={6}>
-            <Heading size="md" mb={4} color="white" fontFamily="Urbanist, sans-serif">Candidates</Heading>
-            
-            <Tabs variant="soft-rounded" colorScheme="blue" mb={4}>
-              <TabList mb={4} bg="#202020" p={2} borderRadius="md">
-                <Tab _selected={{ bg: 'blue.500', color: 'white' }} color="white" fontFamily="Urbanist, sans-serif">All</Tab>
-                <Tab _selected={{ bg: 'green.500', color: 'white' }} color="white" fontFamily="Urbanist, sans-serif">Accepted</Tab>
-                <Tab _selected={{ bg: 'red.500', color: 'white' }} color="white" fontFamily="Urbanist, sans-serif">Rejected</Tab>
-              </TabList>
+            <Flex justifyContent="space-between" alignItems="center" mb={4}>
+               <Heading size="md" mb={2} color="white" fontFamily="Urbanist, sans-serif" letterSpacing="widest">
+                Candidates
+                </Heading>
               
-              <TabPanels>
-                <TabPanel p={0}>
-                  <CandidateTable 
-                    isLoading={isCandidatesLoading} 
-                    onEditCandidate={handleEditCandidate}
-                    onAddCandidate={handleAddCandidate}
-                    tableProps={{
-                      bg: '#202020',
-                      theadProps: {
-                        bg: '#898989',
-                        color: 'white',
-                        fontFamily: 'Urbanist, sans-serif'
-                      },
-                      showSortIcons: true
+              {/* Years filter moved to Dashboard */}
+              <HStack spacing={4}>
+                <Box width="150px">
+                  <Select 
+                    value={filters.year || ''}
+                    onChange={handleYearFilterChange}
+                    bg="#252525"
+                    borderColor="gray.700"
+                    _hover={{
+                      borderColor: "gray.600"
                     }}
-                  />
-                </TabPanel>
-                <TabPanel p={0}>
-                  <CandidateTable 
-                    isLoading={isCandidatesLoading} 
-                    onEditCandidate={handleEditCandidate}
-                    onAddCandidate={handleAddCandidate}
-                    candidates={candidates.filter(c => ['hired', 'interview', 'hrround'].includes(c.status))}
-                    tableProps={{
-                      bg: '#202020',
-                      theadProps: {
-                        bg: '#898989',
-                        color: 'white',
-                        fontFamily: 'Urbanist, sans-serif'
-                      },
-                      showSortIcons: true
-                    }}
-                  />
-                </TabPanel>
-                <TabPanel p={0}>
-                  <CandidateTable 
-                    isLoading={isCandidatesLoading} 
-                    onEditCandidate={handleEditCandidate}
-                    onAddCandidate={handleAddCandidate}
-                    candidates={candidates.filter(c => c.status === 'rejected')}
-                    tableProps={{
-                      bg: '#202020',
-                      theadProps: {
-                        bg: '#898989',
-                        color: 'white',
-                        fontFamily: 'Urbanist, sans-serif'
-                      },
-                      showSortIcons: true
-                    }}
-                  />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+                    color="white"
+                    size="sm"
+                  >
+                    <option value="">All Years</option>
+                    {years.map(year => (
+                      <option key={year} value={year.toString()}>{year}</option>
+                    ))}
+                  </Select>
+                </Box>
+              </HStack>
+            </Flex>
+            
+            {/* CandidateTable with internal tabs implementation */}
+            <CandidateTable 
+              isLoading={isCandidatesLoading} 
+              onEditCandidate={handleEditCandidate}
+              onAddCandidate={handleAddCandidate}
+              tableProps={{
+                bg: '#202020',
+                theadProps: {
+                  bg: '#252525',
+                  color: 'white',
+                  fontFamily: 'Urbanist, sans-serif'
+                },
+                showSortIcons: true
+              }}
+            />
           </Box>
         </Flex>
         

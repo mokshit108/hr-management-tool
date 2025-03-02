@@ -9,6 +9,7 @@ class CandidateStatus(enum.Enum):
     INTERVIEW = "Interview"
     HRROUND = "HR Round"
     HIRED = "Hired"
+    ACCEPTED = "Accepted"
     REJECTED = "Rejected"
 
 class JobPosition(db.Model):
@@ -42,6 +43,8 @@ class Candidate(db.Model):
     skills = db.Column(db.Text, nullable=True)
     experience_years = db.Column(db.Float, nullable=True)
     education = db.Column(db.String(255), nullable=True)
+    rating = db.Column(db.Float, nullable=True)
+    
     
     # Foreign key to job position
     job_position_id = db.Column(db.Integer, db.ForeignKey('job_positions.id'))
